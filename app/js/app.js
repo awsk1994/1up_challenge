@@ -4,7 +4,7 @@ var myApp = angular.module('myApp', ['ngRoute']);
 
 
 myApp.config(function($routeProvider, $locationProvider, $httpProvider){
-      $httpProvider.defaults.withCredentials = true;
+//      $httpProvider.defaults.withCredentials = true;
 
        $routeProvider.when('/main',
            {
@@ -23,21 +23,21 @@ myApp.config(function($routeProvider, $locationProvider, $httpProvider){
         $routeProvider.otherwise({redirectTo: '/main'});
         $locationProvider.html5Mode(true);
         // to avoid CORS
-        $httpProvider.defaults.withCredentials = true;
-        $httpProvider.defaults.useXDomain = true;
-        delete $httpProvider.defaults.headers.common['X-Requested-With'];
+//        $httpProvider.defaults.withCredentials = true;
+//        $httpProvider.defaults.useXDomain = true;
+//        delete $httpProvider.defaults.headers.common['X-Requested-With'];
     });
 
 myApp.controller('View1Controller', function($scope, $location, $http) {
-    $scope.client_id = "f0e488e7488a4f88bcefd03e0e545413";
-    $scope.client_secret = "Wfonj5RqcKZIsEu3fnJVXajkMsTJp4mN";
+    $scope.client_id = "21da48f1c1ba449b969dd74c1e25580c";
+    $scope.client_secret = "d1zyctsjb5qM4yoLGDCBYlmdWVa9FHfZ";
 
     $scope.create_user = function(app_user_id, client_id, client_secret){
         let url = "https://api.1up.health/user-management/v1/user"
         let data = {
-            "app_user_id": app_user_id,
-            "client_id": client_id,
-            "client_secret": client_secret
+            "app_user_id": "myappsuserid",
+            "client_id": "clientidclientidclientid",
+            "client_secret": "clientsecretclientsecret"
         };
         let headers = {
             "Content-type": "multipart/form-data"
@@ -50,7 +50,6 @@ myApp.controller('View1Controller', function($scope, $location, $http) {
             url: url,
             headers: headers,
             data: data,
-            "withCredentials": true
         }).then(function(res){
             console.log("response");
             console.log(res);
@@ -86,7 +85,6 @@ myApp.controller('View1Controller', function($scope, $location, $http) {
             "headers": {
                 "Content-Type": "multipart/form-data"
             },
-            "withCredentials": true
         };
 
         $http.post(url, data, config).then(function(res){
