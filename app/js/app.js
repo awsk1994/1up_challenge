@@ -19,6 +19,10 @@ myApp.config(function($routeProvider, $locationProvider){
             });
         $routeProvider.otherwise({redirectTo: '/main'});
         $locationProvider.html5Mode(true);
+        // to avoid CORS
+        $httpProvider.defaults.withCredentials = true;
+        $httpProvider.defaults.useXDomain = true;
+        delete $httpProvider.defaults.headers.common['X-Requested-With'];
     });
 
 myApp.controller('View1Controller', function($scope, $location, $http) {
