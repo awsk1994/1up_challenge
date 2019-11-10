@@ -35,14 +35,44 @@ myApp.controller('View1Controller', function($scope, $location, $http) {
             "app_user_id": app_user_id,
             "client_id": client_id,
             "client_secret": client_secret
-        }
+        };
+        let headers = {
+            "Access-Control-Allow-Origin": "https://oneup-challenge-t1.herokuapp.com/view1"
+        };
 
-        $http.post(url, data).then(function(res){
+        console.log("Create user");
+
+        $http({
+            method: 'POST',
+            url: url,
+            headers: headers,
+            data: data
+        }).then(function(res){
             console.log("response");
             console.log(res);
         });
     };
 
+
+
+    $scope.test_post = function(){
+        let url = 'https://jsonplaceholder.typicode.com/posts';
+        let data = {
+            title: 'foo',
+            body: 'bar',
+            userId: 1
+        };
+        let config = {
+            "headers": {"Content-type": "application/json; charset=UTF-8"}
+        };
+
+        $http.post(url, data, config).then(function(res){
+            console.log("res");
+            console.log(res);
+        })
+    }
+
+    //$scope.test_post();
     $scope.create_user(0, $scope.client_id, $scope.client_secret);
 });
 
