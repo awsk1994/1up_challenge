@@ -2,7 +2,10 @@
 
 var myApp = angular.module('myApp', ['ngRoute']);
 
+
 myApp.config(function($routeProvider, $locationProvider, $httpProvider){
+      $httpProvider.defaults.withCredentials = true;
+
        $routeProvider.when('/main',
            {
                templateUrl: 'templates/main.html'
@@ -37,7 +40,7 @@ myApp.controller('View1Controller', function($scope, $location, $http) {
             "client_secret": client_secret
         };
         let headers = {
-            "Access-Control-Allow-Origin": "https://oneup-challenge-t1.herokuapp.com/view1"
+            "Content-type": "multipart/form-data"
         };
 
         console.log("Create user");
@@ -46,7 +49,8 @@ myApp.controller('View1Controller', function($scope, $location, $http) {
             method: 'POST',
             url: url,
             headers: headers,
-            data: data
+            data: data,
+            "withCredentials": true
         }).then(function(res){
             console.log("response");
             console.log(res);
@@ -63,7 +67,7 @@ myApp.controller('View1Controller', function($scope, $location, $http) {
             userId: 1
         };
         let config = {
-            "headers": {"Content-type": "application/json; charset=UTF-8"}
+            "headers": {"Content-type": "multipart/form-data"}
         };
 
         $http.post(url, data, config).then(function(res){
@@ -72,7 +76,27 @@ myApp.controller('View1Controller', function($scope, $location, $http) {
         })
     }
 
-    //$scope.test_post();
+    $scope.test_post2 = function(){
+        let url = 'https://reqres.in/api/users';
+        let data = {
+                       "name": "morpheus",
+                       "job": "leader"
+                   }
+        let config = {
+            "headers": {
+                "Content-Type": "multipart/form-data"
+            },
+            "withCredentials": true
+        };
+
+        $http.post(url, data, config).then(function(res){
+            console.log("res");
+            console.log(res);
+        })
+    };
+
+    $scope.test_post();
+    $scope.test_post2();
     $scope.create_user(0, $scope.client_id, $scope.client_secret);
 });
 
