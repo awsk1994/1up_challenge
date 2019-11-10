@@ -1,10 +1,35 @@
 <div class="container">
-    <h1 style="text-align: center">
-
-        App User Id: <input type="text" ng-model="app_user_id"/>
-        <br>
+    <p style="text-align: center">
         Cred Type ("heroku" or "local"): <input type="text" ng-model="cred_type"/>
+    </p>
+    <hr>
+    <p style="text-align: center">
+        <button ng-click="get_users()">Get User</button>
         <br>
-        <button ng-click="create_user(app_user_id, 'heroku')">Create User</button>
-    </h1>
+
+        <div ng-repeat="user in users" style="text-align: center">
+            {{user.app_user_id}}
+        </div>
+    </p>
+    <hr>
+    <p style="text-align: center">
+        App User Id: <input type="text" ng-model="app_user_id"/>
+        <button ng-click="create_user(app_user_id)">Create User</button>
+        {{create_user_resp}}
+    </p>
+    <hr>
+    <p style="text-align: center">
+        <button ng-click="get_system_id()">Get System Id</button>
+        <br>
+        {{system_id_resp}}
+    </p>
+    <hr>
+    <p style="text-align: center">
+        <input type="text" ng-input="code"/>
+        <button ng-click="get_access_token(code)">Get Access Code</button>
+        <br>
+
+    </p>
 </div>
+
+

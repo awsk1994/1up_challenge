@@ -23,6 +23,14 @@ myApp.config(function($routeProvider, $locationProvider, $httpProvider){
     });
 
 myApp.controller('View1Controller', function($scope, $location, $http) {
+    $scope.cred_type = "term_ie";    // "heroku" or "local" or "term_ie"
+    $scope.users = {};
+    $scope.create_user_resp = null;
+    $scope.cache_access_code = null;
+    $scope.system_id_resp = null;
+
+
+    // TODO: Should store client_id and secret in encrypted or hashed version
     $scope.localhost_cred = {
         "client_id": "21da48f1c1ba449b969dd74c1e25580c",
         "client_secret": "d1zyctsjb5qM4yoLGDCBYlmdWVa9FHfZ"
@@ -33,34 +41,93 @@ myApp.controller('View1Controller', function($scope, $location, $http) {
         "client_secret": "6ttx89UOq6k5wBOcVbO0N5gcbGGK9FtG"
     }
 
+    $scope.term_ie_cred = {
+        "client_id": "01269e69c8d844268c06c4cad1107291",
+        "client_secret": "hPWvy0ly5isYaoJNHxEWemA02XiRN26Z"
+    }
+
+    function get_client_info(){
+        let client_info = {
+            "client_id": null,
+            "client_secret": null
+        }
+        if($scope.cred_type == "heroku"){
+            client_info = $scope.heroku_cred;
+        } else if ($scope.cred_type == "local") {
+            client_info = $scope.localhost_cred;
+        } else if ($scope.cred_type == "term_ie"){
+            client_info = $scope.term_ie_cred;
+        }
+
+        return client_info;
+    }
+
     $scope.create_user = function(app_user_id){
         // Set client_id and client_secret
         let client_id, client_secret;
         let cred_type = $scope.cred_type;
-        if(cred_type == "heroku"){
-            client_id = $scope.heroku_cred.client_id;
-            client_secret = $scope.heroku_cred.client_secret;
-        } else {
-            client_id = $scope.localhost_cred.client_id;
-            client_secret = $scope.localhost_cred.client_secret;
-        }
+
+        let client_info = get_client_info();
 
         // POST request
         let data = {
             "app_user_id": app_user_id,
-            "client_id": client_id,
-            "client_secret": client_secret
+            "client_id": client_info.client_id,
+            "client_secret": client_info.client_secret
         };
         $http({
             method: 'POST',
             url: "https://api.1up.health/user-management/v1/user",
-            headers: {"Content-type": "multipart/form-data"},
             data: data,
         }).then(function(res){
-            console.log("response");
-            console.log(res);
+            $scope.create_user_resp = res.data;
+            $scope.cache_access_code = res.data.code;
         });
     };
+
+    $scope.get_users = function(){
+        let url = "https://api.1up.health/user-management/v1/user";
+        let client_info = get_client_info();
+        let data = {
+            "params": {
+                "client_id": client_info.client_id,
+                "client_secret": client_info.client_secret
+            }
+        }
+        $http.get(url, data).then(function(res){
+            $scope.users = res.data.entry;
+        })
+    }
+
+    $scope.get_system_id = function(){
+        let url = "https://api.1up.health/connect/system/clinical";
+        let client_info = get_client_info();
+        let data = {
+            "params": {
+                "client_id": client_info.client_id,
+                "client_secret": client_info.client_secret
+            }
+        }
+        $http.get(url, data).then(function(res){
+            console.log(res.data);
+            $scope.system_id_resp = "Got system id (in console). Len = " + res.data.length;
+        })
+    }
+
+    // TODO: https://1up.health/dev/doc/intro-fhir-api-oauth-query
+    $scope.get_access_token = function(code){
+        let url = "https://api.1up.health/fhir/oauth2/token";
+        let client_info = get_client_info();
+        let data = {
+            "client_id": client_info.client_id,
+            "client_secret": client_info.client_secret,
+            "code": code,
+            "grant_type": "authorization_code"
+        }
+        $http.post(url, {}, {"params": data}).then(function(res){
+            console.log(res);
+        });
+    }
 });
 
 myApp.controller('View2Controller', function($scope, $location) {

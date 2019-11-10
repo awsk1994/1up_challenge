@@ -1,6 +1,7 @@
 # 1up take home
 
 TODO: Fix ERROR Access to XMLHttpRequest at 'https://api.1up.health/user-management/v1/user' from origin 'http://localhost:8000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+TODO: study oauth2
 
 
 
