@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "mongoose": ">=4.1.11",
-	"body-parser": "1.13.1",
+    "body-parser": "1.13.1",
     "express": "4.13.3"
   },
   "engines": {
