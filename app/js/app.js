@@ -30,7 +30,7 @@ myApp.config(function($routeProvider, $locationProvider, $httpProvider){
 
 myApp.controller('View1Controller', function($scope, $location, $http) {
     $scope.client_id = "f0e488e7488a4f88bcefd03e0e545413";
-    $scope.client_secret = "Pp3ZrAnORQMGAuspJKAovFbgBxpDjMFt";
+    $scope.client_secret = "Wfonj5RqcKZIsEu3fnJVXajkMsTJp4mN";
 
     $scope.create_user = function(app_user_id, client_id, client_secret){
         let url = "https://api.1up.health/user-management/v1/user"
