@@ -2,7 +2,7 @@
 
 var myApp = angular.module('myApp', ['ngRoute']);
 
-myApp.config(function($routeProvider, $locationProvider){
+myApp.config(function($routeProvider, $locationProvider, $httpProvider){
        $routeProvider.when('/main',
            {
                templateUrl: 'templates/main.html'
