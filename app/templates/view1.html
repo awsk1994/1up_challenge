@@ -1,5 +1,10 @@
 <div class="container">
     <h1 style="text-align: center">
-        This is View #1
+
+        App User Id: <input type="text" ng-model="app_user_id"/>
+        <br>
+        Cred Type ("heroku" or "local"): <input type="text" ng-model="cred_type"/>
+        <br>
+        <button ng-click="create_user(app_user_id, 'heroku')">Create User</button>
     </h1>
 </div>

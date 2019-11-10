@@ -4,8 +4,6 @@ var myApp = angular.module('myApp', ['ngRoute']);
 
 
 myApp.config(function($routeProvider, $locationProvider, $httpProvider){
-//      $httpProvider.defaults.withCredentials = true;
-
        $routeProvider.when('/main',
            {
                templateUrl: 'templates/main.html'
@@ -22,80 +20,47 @@ myApp.config(function($routeProvider, $locationProvider, $httpProvider){
             });
         $routeProvider.otherwise({redirectTo: '/main'});
         $locationProvider.html5Mode(true);
-        // to avoid CORS
-//        $httpProvider.defaults.withCredentials = true;
-//        $httpProvider.defaults.useXDomain = true;
-//        delete $httpProvider.defaults.headers.common['X-Requested-With'];
     });
 
 myApp.controller('View1Controller', function($scope, $location, $http) {
-    $scope.client_id = "21da48f1c1ba449b969dd74c1e25580c";
-    $scope.client_secret = "d1zyctsjb5qM4yoLGDCBYlmdWVa9FHfZ";
+    $scope.localhost_cred = {
+        "client_id": "21da48f1c1ba449b969dd74c1e25580c",
+        "client_secret": "d1zyctsjb5qM4yoLGDCBYlmdWVa9FHfZ"
+    }
 
-    $scope.create_user = function(app_user_id, client_id, client_secret){
-        let url = "https://api.1up.health/user-management/v1/user"
+    $scope.heroku_cred = {
+        "client_id": "21da48f1c1ba449b969dd74c1e25580c",
+        "client_secret": "d1zyctsjb5qM4yoLGDCBYlmdWVa9FHfZ"
+    }
+
+    $scope.create_user = function(app_user_id){
+        // Set client_id and client_secret
+        let client_id, client_secret;
+        let cred_type = $scope.cred_type;
+        if(cred_type == "heroku"){
+            client_id = $scope.heroku_cred.client_id;
+            client_secret = $scope.heroku_cred.client_secret;
+        } else {
+            client_id = $scope.localhost_cred.client_id;
+            client_secret = $scope.localhost_cred.client_secret;
+        }
+
+        // POST request
         let data = {
-            "app_user_id": "myappsuserid",
-            "client_id": "clientidclientidclientid",
-            "client_secret": "clientsecretclientsecret"
+            "app_user_id": app_user_id,
+            "client_id": client_id,
+            "client_secret": client_secret
         };
-        let headers = {
-            "Content-type": "multipart/form-data"
-        };
-
-        console.log("Create user");
-
         $http({
             method: 'POST',
-            url: url,
-            headers: headers,
+            url: "https://api.1up.health/user-management/v1/user",
+            headers: {"Content-type": "multipart/form-data"},
             data: data,
         }).then(function(res){
             console.log("response");
             console.log(res);
         });
     };
-
-
-
-    $scope.test_post = function(){
-        let url = 'https://jsonplaceholder.typicode.com/posts';
-        let data = {
-            title: 'foo',
-            body: 'bar',
-            userId: 1
-        };
-        let config = {
-            "headers": {"Content-type": "multipart/form-data"}
-        };
-
-        $http.post(url, data, config).then(function(res){
-            console.log("res");
-            console.log(res);
-        })
-    }
-
-    $scope.test_post2 = function(){
-        let url = 'https://reqres.in/api/users';
-        let data = {
-                       "name": "morpheus",
-                       "job": "leader"
-                   }
-        let config = {
-            "headers": {
-                "Content-Type": "multipart/form-data"
-            },
-        };
-
-        $http.post(url, data, config).then(function(res){
-            console.log("res");
-            console.log(res);
-        })
-    };
-
-    $scope.test_post();
-    $scope.test_post2();
-    $scope.create_user(0, $scope.client_id, $scope.client_secret);
 });
 
 myApp.controller('View2Controller', function($scope, $location) {
