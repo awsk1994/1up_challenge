@@ -29,8 +29,8 @@ myApp.controller('View1Controller', function($scope, $location, $http) {
     }
 
     $scope.heroku_cred = {
-        "client_id": "21da48f1c1ba449b969dd74c1e25580c",
-        "client_secret": "d1zyctsjb5qM4yoLGDCBYlmdWVa9FHfZ"
+        "client_id": "e490a14752f340f4bdc1b2fa20c3b0c3",
+        "client_secret": "6ttx89UOq6k5wBOcVbO0N5gcbGGK9FtG"
     }
 
     $scope.create_user = function(app_user_id){
