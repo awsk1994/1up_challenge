@@ -1,7 +1,18 @@
+<style>
+   table, th , td {
+      border: 1px solid grey;
+      border-collapse: collapse;
+      padding: 5px;
+   }
+   table tr:nth-child(odd) {
+      background-color: #f2f2f2;
+   }
+   table tr:nth-child(even) {
+      background-color: #ffffff;
+   }
+</style>
+
 <div class="container">
-    <p style="text-align: center">
-        Cred Type ("heroku" or "local"): <input type="text" ng-model="cred_type"/>
-    </p>
     <hr>
     <p style="text-align: center">
         <button ng-click="get_users()">Get User</button>
@@ -26,10 +37,84 @@
     <hr>
     <p style="text-align: center">
         <input type="text" ng-model="app_user_id"/>
-        <button ng-click="get_access_token(app_user_id)">Get Access Code</button>
+        <button ng-click="get_access_token(app_user_id)">Get Access Code from Existing User</button>
         <br>
-
+        {{access_token}} (Todo: Should hide this)
     </p>
+    <hr>
+    <p style="text-align: center">
+        <button ng-click="redirectToEpicLogin()">Authorize Epic Login</button>
+        <br>
+    </p>
+    <hr>
+    <p style="text-align: center">
+        <button ng-click="access_client_data()">Access Client Data</button>
+        <br>
+    </p>
+    <hr>
+    <p style="text-align: center">
+        New Patient Id: <input type="text" ng-model="new_patient_id"/>
+        New Patient Gender (male or female): <input type="text" ng-model="new_patient_gender"/>
+        <button ng-click="create_patient_data(new_patient_id, new_patient_gender)">Create Patient Data</button>
+        <br>
+        <div ng-show="create_patient_err != null" style="text-align: center; color: red">
+            Error: {{create_patient_err}}
+        </div>
+        <div ng-show="create_patient_err == null && patient_id != null" style="text-align: center; color: green">
+            Created Patient Id: {{patient_id}}
+        </div>
+    </p>
+
+    <hr>
+    <p style="text-align: center">
+        Patient Id: <input type="text" ng-model="query_patient_id"/>
+        <button ng-click="get_patient_data(query_patient_id)">Get Patient Data</button>
+        <button ng-click="generate_sample_get_patient_data()">Generate Sample Patient Data</button>
+        <br>
+    </p>
+    <hr>
+    <div ng-show="get_patient_resp">
+        <h3>Summary</h3>
+        <table>
+            <tr>
+                <th>Resource Type</th>
+                <td>{{get_patient_resp.resourceType}}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{get_patient_resp.type}}</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <td>{{get_patient_resp.total}}</td>
+            </tr>
+        </table>
+        <h3>Details</h3>
+        <table>
+            <tr ng-repeat = "entry in get_patient_resp.entry">
+                <td style="padding-left: 30px">
+
+                    <table ng-if="entry.resource.resourceType == 'Patient'">
+                        <tr ng-repeat="(key, value) in entry.resource">
+                            <th>{{key}}</th>
+                            <td>{{value}}</td>
+                        </tr>
+                    </table>
+
+                    <table ng-if="entry.resource.resourceType == 'Provenance'">
+                        <tr ng-repeat="(key, value) in entry.resource">
+                            <th>{{key}}</th>
+                            <td>{{value}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <hr>
+        <h3>Raw Patient Data:</h3>
+        {{get_patient_resp}}
+    </div>
 </div>
 
 
