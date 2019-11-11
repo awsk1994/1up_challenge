@@ -28,6 +28,8 @@ myApp.controller('View1Controller', function($scope, $location, $http) {
     $scope.create_user_resp = null;
     $scope.cache_access_code = null;
     $scope.system_id_resp = null;
+    $scope.access_token = null;
+    $scope.refresh_token = null;
 
 
     // TODO: Should store client_id and secret in encrypted or hashed version
@@ -86,6 +88,7 @@ myApp.controller('View1Controller', function($scope, $location, $http) {
     };
 
     $scope.get_users = function(){
+        console.log("get user");
         let url = "https://api.1up.health/user-management/v1/user";
         let client_info = get_client_info();
         let data = {
@@ -115,18 +118,39 @@ myApp.controller('View1Controller', function($scope, $location, $http) {
     }
 
     // TODO: https://1up.health/dev/doc/intro-fhir-api-oauth-query
-    $scope.get_access_token = function(code){
-        let url = "https://api.1up.health/fhir/oauth2/token";
+    $scope.get_access_token = function(app_user_id){
         let client_info = get_client_info();
-        let data = {
-            "client_id": client_info.client_id,
-            "client_secret": client_info.client_secret,
-            "code": code,
-            "grant_type": "authorization_code"
+
+        function get_access_code(code){
+            let url = "https://api.1up.health/fhir/oauth2/token";
+            let data = {
+                "client_id": client_info.client_id,
+                "client_secret": client_info.client_secret,
+                "code": code,
+                "grant_type": "authorization_code"
+            }
+            $http.post(url, {}, {"params": data}).then(function(res){
+                console.log(res.data);
+                $scope.access_token = res.data.access_token;
+                $scope.refresh_token = res.data.refresh_token;
+            });
         }
-        $http.post(url, {}, {"params": data}).then(function(res){
-            console.log(res);
-        });
+
+        function get_auth_code(app_user_id){
+            let url = "https://api.1up.health/user-management/v1/user/auth-code";
+            let data = {
+                "app_user_id": app_user_id,
+                "client_id": client_info.client_id,
+                "client_secret": client_info.client_secret
+            };
+
+            $http.post(url, {}, {"params": data}).then(function(res){
+                let code = res.data.code
+                get_access_code(code);
+            });
+        }
+
+        get_auth_code(app_user_id);
     }
 });
 
