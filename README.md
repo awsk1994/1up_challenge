@@ -1,13 +1,14 @@
 # 1up Take Home Code Challenge
 
 ## Steps
-0: "Use CORS-anywhere": COR header is not set in response from server, thus, need to use cors-anywhere or CORS plugin on browser to bypass CORS policy. If not using CORS browser plugin, you need to check the box here.
+
+0. "Use CORS-anywhere": COR header is not set in response from server, thus, need to use cors-anywhere or CORS plugin on browser to bypass CORS policy. If not using CORS browser plugin, you need to check the box here.
 1. "Get User": This will get all the existing user from upHealth
 2. "Create User": Alternatively, you can create your own user. Creating a user with same name as existing will return an error.
 3. "Get SystemId": This is for the 5th step (Authorize Epic Login). But because this is a demo system and we only have access to Epic, the system code is hard coded.
 4. "Get AccessCode from Existing User": This button will retrieve access code (oAuth2) from upHealth. The access code is used to authorize access from Epic and retrieve Patient data.
 5. "Authorize Epic Login": Redirects to Epic website to authorize access.
-6. "Access Client Data": ??
+6. "Access Client Data": Todo
 7. "Create Patient data": creates patient data. Creating new patient with id of existing ones will result in error.
 8. "Get Patient Data": Get patient data given the patient id.
 
