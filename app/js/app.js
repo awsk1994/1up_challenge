@@ -5,7 +5,8 @@ var myApp = angular.module('myApp', ['ngRoute']);
 myApp.config(function($routeProvider, $locationProvider, $httpProvider){
        $routeProvider.when('/main',
            {
-               templateUrl: 'templates/main.html'
+               templateUrl: 'templates/main.html',
+               controller: 'mainController'
            });
         $routeProvider.when('/view1',
             {
@@ -51,6 +52,10 @@ myApp.filter('exclude', function(){
     }
 });
 
+myApp.controller('mainController', function($location){
+    $location.url('/view1');
+});
+
 myApp.controller('View1Controller', function($scope, $location, $http, $window) {
     $scope.cred_type = "local";    // "heroku" or "local" or "term_ie"
     $scope.users = {};
@@ -61,6 +66,7 @@ myApp.controller('View1Controller', function($scope, $location, $http, $window) 
     $scope.refresh_token = null;
     $scope.patient_id = null;
     $scope.get_patient_resp = null;
+    $scope.use_cors = false;
 
     $scope.create_patient_err = null;
 
@@ -109,9 +115,13 @@ myApp.controller('View1Controller', function($scope, $location, $http, $window) 
             "client_id": client_info.client_id,
             "client_secret": client_info.client_secret
         };
+        let url = "https://api.1up.health/user-management/v1/user"
+        if($scope.use_cors){
+            url = "https://cors-anywhere.herokuapp.com/" + url;
+        }
         $http({
             method: 'POST',
-            url: "https://api.1up.health/user-management/v1/user",
+            url: url,
             data: data,
         }).then(function(res){
             $scope.create_user_resp = res.data;
@@ -122,6 +132,9 @@ myApp.controller('View1Controller', function($scope, $location, $http, $window) 
     $scope.get_users = function(){
         console.log("get user");
         let url = "https://api.1up.health/user-management/v1/user";
+        if($scope.use_cors){
+            url = "https://cors-anywhere.herokuapp.com/" + url;
+        }
         let client_info = get_client_info();
         let data = {
             "params": {
@@ -136,6 +149,9 @@ myApp.controller('View1Controller', function($scope, $location, $http, $window) 
 
     $scope.get_system_id = function(){
         let url = "https://api.1up.health/connect/system/clinical";
+        if($scope.use_cors){
+            url = "https://cors-anywhere.herokuapp.com/" + url;
+        }
         let client_info = get_client_info();
         let data = {
             "params": {
@@ -155,6 +171,9 @@ myApp.controller('View1Controller', function($scope, $location, $http, $window) 
 
         function retrieve_access_code(code){
             let url = "https://api.1up.health/fhir/oauth2/token";
+            if($scope.use_cors){
+                url = "https://cors-anywhere.herokuapp.com/" + url;
+            }
             let data = {
                 "client_id": client_info.client_id,
                 "client_secret": client_info.client_secret,
@@ -170,6 +189,9 @@ myApp.controller('View1Controller', function($scope, $location, $http, $window) 
 
         function get_auth_code(app_user_id){
             let url = "https://api.1up.health/user-management/v1/user/auth-code";
+            if($scope.use_cors){
+                url = "https://cors-anywhere.herokuapp.com/" + url;
+            }
             let data = {
                 "app_user_id": app_user_id,
                 "client_id": client_info.client_id,
@@ -189,12 +211,18 @@ myApp.controller('View1Controller', function($scope, $location, $http, $window) 
         // username: fhirjason, pw: epicepic1
         let system_id = 4706;
         let url = "https://quick.1up.health/connect/" + system_id + "?client_id="+get_client_info().client_id+"&access_token=" + $scope.access_token;
+        if($scope.use_cors){
+            url = "https://cors-anywhere.herokuapp.com/" + url;
+        }
         $window.open(url, '_blank');
     };
 
     $scope.access_client_data = function(){
         let client_info = get_client_info();
         let url = "https://api.1up.health/connect/system/clinical"
+        if($scope.use_cors){
+            url = "https://cors-anywhere.herokuapp.com/" + url;
+        }
         let params = {
             "clientid": client_info.client_id,
             "clientsecret": client_info.client_secret
@@ -206,6 +234,9 @@ myApp.controller('View1Controller', function($scope, $location, $http, $window) 
 
     $scope.create_patient_data = function(id, gender){
         let url = "https://api.1up.health/fhir/dstu2/Patient";
+        if($scope.use_cors){
+            url = "https://cors-anywhere.herokuapp.com/" + url;
+        }
         let config = {
             "headers": {
                 "Authorization": "Bearer " + $scope.access_token
@@ -229,6 +260,9 @@ myApp.controller('View1Controller', function($scope, $location, $http, $window) 
 
     $scope.get_patient_data = function(patient_id){
         let url = "https://api.1up.health/fhir/dstu2/Patient/" + patient_id + "/$everything";
+        if($scope.use_cors){
+            url = "https://cors-anywhere.herokuapp.com/" + url;
+        }
         let config = {
             "headers": {
                 "Authorization": "Bearer " + $scope.access_token
