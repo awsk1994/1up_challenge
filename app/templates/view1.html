@@ -93,18 +93,114 @@
         <table>
             <tr ng-repeat = "entry in get_patient_resp.entry">
                 <td style="padding-left: 30px">
-
                     <table ng-if="entry.resource.resourceType == 'Patient'">
-                        <tr ng-repeat="(key, value) in entry.resource">
+                        <tr ng-repeat="(key, value) in entry.resource | include:['gender', 'id', 'resourceType']">
                             <th>{{key}}</th>
                             <td>{{value}}</td>
+                        </tr>
+                        <tr ng-repeat="(key, value) in entry.resource | include:['meta']">
+                            <th>{{key}}</th>
+                            <td>
+                                <table>
+                                    <tr ng-repeat="(k,v) in value">
+                                        <th>{{k}}</th>
+                                        <td>{{v}}</td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                     </table>
 
                     <table ng-if="entry.resource.resourceType == 'Provenance'">
-                        <tr ng-repeat="(key, value) in entry.resource">
+                        <tr ng-repeat="(key, value) in entry.resource | include:['recorded', 'id', 'resourceType']">
                             <th>{{key}}</th>
                             <td>{{value}}</td>
+                        </tr>
+                        <tr ng-repeat="(key, value) in entry.resource | include:['meta']">
+                            <th>{{key}}</th>
+                            <td>
+                                <table>
+                                    <tr ng-repeat="(k,v) in value">
+                                        <th>{{k}}</th>
+                                        <td>{{v}}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="(key, value) in entry.resource | include:['activity']">
+                            <th>{{key}}</th>
+                            <td>
+                                <table>
+                                    <tr ng-repeat="(k,coding_arr) in value">
+                                        <th>{{k}}</th>
+                                        <td>
+                                            <table>
+                                                <tr ng-repeat="coding in coding_arr">
+                                                    <td>
+                                                        <table>
+                                                            <tr ng-repeat="(coding_k, coding_v) in coding">
+                                                                <th>{{coding_k}}</th>
+                                                                <td>{{coding_v}}</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="(key, targets) in entry.resource | include:['target']">
+                            <th>{{key}}</th>
+                            <td>
+                                <table>
+                                    <tr ng-repeat="target in targets">
+                                        <td>
+                                            <table>
+                                                <tr ng-repeat="(t_k, t_v) in target">
+                                                    <th>{{t_k}}</th>
+                                                    <td>{{t_v}}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="(key, agents) in entry.resource | include:['agent']">
+                            <th>{{key}}</th>
+                            <td>
+                                <table>
+                                    <tr ng-repeat="agent in agents">
+                                        <td>
+                                            <table>
+                                                <tr ng-repeat="(agent_k, agent_v) in agent">
+                                                    <th>{{agent_k}}</th>
+                                                    <td>{{agent_v}}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="(key, entities) in entry.resource | include:['entity']">
+                            <th>{{key}}</th>
+                            <td>
+                                <table>
+                                    <tr ng-repeat="entity in entities">
+                                        <td>
+                                            <table>
+                                                <tr ng-repeat="(entity_k, entity_v) in entity">
+                                                    <th>{{entity_k}}</th>
+                                                    <td>{{entity_v}}</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                     </table>
                 </td>

@@ -2,7 +2,6 @@
 
 var myApp = angular.module('myApp', ['ngRoute']);
 
-
 myApp.config(function($routeProvider, $locationProvider, $httpProvider){
        $routeProvider.when('/main',
            {
@@ -22,6 +21,36 @@ myApp.config(function($routeProvider, $locationProvider, $httpProvider){
         $locationProvider.html5Mode(true);
     });
 
+myApp.filter('include', function(){
+    return function(input, targets){
+        let ans = {}
+        for(var i=0; i<targets.length; i++){
+            let target = targets[i];
+            angular.forEach(input, function(value, key){
+                if(key == target){
+                    ans[key] = value;
+                }
+            });
+        }
+        return ans;
+    }
+});
+
+myApp.filter('exclude', function(){
+    return function(input, targets){
+        let ans = {}
+        for(var i=0; i<targets.length; i++){
+            let target = targets[i];
+            angular.forEach(input, function(value, key){
+                if(key != target){
+                    ans[key] = value;
+                }
+            });
+        }
+        return ans;
+    }
+});
+
 myApp.controller('View1Controller', function($scope, $location, $http, $window) {
     $scope.cred_type = "local";    // "heroku" or "local" or "term_ie"
     $scope.users = {};
@@ -35,7 +64,7 @@ myApp.controller('View1Controller', function($scope, $location, $http, $window) 
 
     $scope.create_patient_err = null;
 
-    // TODO: Should store client_id and secret in encrypted or hashed version
+    // TODO: Should store client_id and secret in encrypted or hashed version of local drive.
     $scope.localhost_cred = {
         "client_id": "21da48f1c1ba449b969dd74c1e25580c",
         "client_secret": "d1zyctsjb5qM4yoLGDCBYlmdWVa9FHfZ"
