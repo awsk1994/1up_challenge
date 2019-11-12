@@ -1,5 +1,7 @@
 # 1up Take Home Code Challenge
 
+Demo Link: https://oneup-challenge-t1.herokuapp.com/view1
+
 ## Steps
 
 0. "Use CORS-anywhere": COR header is not set in response from server, thus, need to use cors-anywhere or CORS plugin on browser to bypass CORS policy. If not using CORS browser plugin, you need to check the box here.
