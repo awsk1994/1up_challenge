@@ -12,7 +12,11 @@
 7. "Create Patient data": creates patient data. Creating new patient with id of existing ones will result in error.
 8. "Get Patient Data": Get patient data given the patient id.
 
-## Todo:
+## Steps to install and run on local:
+1. npm install
+2. npm start
+
+## Todo
  - Modularize the html code into directives.
  - Beautify the front-end
  - Save client id and client secret encrypted somewhere in local drive (rather than in the code)
